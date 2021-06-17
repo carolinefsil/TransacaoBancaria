@@ -11,21 +11,48 @@ public class ContaCorrente {
     private Long id;
     private int numero;
     private Double saldo;
-    @ManyToOne (fetch = FetchType.EAGER)
-    private Long cliente;
+    @ManyToOne
+    @JoinColumn(name = "idCliente")
+    private Cliente cliente;
 
     @Deprecated
-    public ContaCorrente() {
+    public ContaCorrente( ) {
     }
 
-
-    public ContaCorrente(int numero, Double saldo, Cliente cliente) {
+    public ContaCorrente(Long id, int numero, Double saldo, Cliente cliente) {
+        this.id = id;
         this.numero = numero;
         this.saldo = saldo;
-        this.cliente = cliente.getCpf();
+        this.cliente = cliente;
     }
 
-    public Long getCliente() {
-        return getCliente();
+    public ContaCorrente(int numero, Double saldo, Long cpf) {
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setCliente(String cliente) {
     }
 }

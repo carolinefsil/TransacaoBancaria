@@ -28,7 +28,7 @@ public class ClienteController {
     @Transactional
     @PostMapping
     public ResponseEntity<ClienteReply> save(@RequestBody ClienteRequest requestDTO) {
-        Cliente cliente = requestDTO.converter();
+        Cliente cliente = requestDTO.converter(requestDTO);
 
         return ResponseEntity.ok().body(new ClienteReply(clienteRepository.save(cliente)));
     }

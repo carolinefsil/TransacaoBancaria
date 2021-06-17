@@ -1,6 +1,8 @@
 package br.com.una.Trabalho.Models;
 
 
+import br.com.una.Trabalho.Util.ExceptionCustom;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,14 +18,18 @@ public class Cliente {
     private Long cpf;
     private String endereco;
 
-    @Deprecated
-    public Cliente() {
+
+    public Cliente(int numero, Double saldo, Long cpf) {
     }
 
     public Cliente(String nome, Long cpf, String endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
+    }
+
+    @Deprecated
+    public Cliente() {
     }
 
     public Long getId() {
@@ -38,19 +44,16 @@ public class Cliente {
         return cpf;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
 }

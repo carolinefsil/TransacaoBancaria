@@ -17,7 +17,7 @@ public class ClienteRequest {
     }
 
 
-    public Cliente converter() {
+    public Cliente converter(ClienteRequest requestDTO){
         return new Cliente(this.nome, this.cpf, this.endereco);
     }
 

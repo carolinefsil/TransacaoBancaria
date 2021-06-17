@@ -5,19 +5,14 @@ import br.com.una.Trabalho.Models.ContaCorrente;
 
 public class ContaCorrenteReply {
 
-    private Long id;
     private int numero;
     private Double saldo;
-    private Long cliente;
+    private Cliente cliente;
 
-    public ContaCorrenteReply(ContaCorrente save) {
-        this.numero = numero;
-        this.saldo = saldo;
-        this.cliente = cliente;
-    }
-
-    public Long getId() {
-        return id;
+    public ContaCorrenteReply(ContaCorrente contaCorrente) {
+        this.numero = contaCorrente.getNumero();
+        this.saldo = contaCorrente.getSaldo();
+        this.cliente = contaCorrente.getCliente();
     }
 
     public int getNumero() {
@@ -28,7 +23,7 @@ public class ContaCorrenteReply {
         return saldo;
     }
 
-    public Long getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 }

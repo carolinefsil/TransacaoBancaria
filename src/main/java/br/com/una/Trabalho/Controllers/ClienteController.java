@@ -5,6 +5,8 @@ import br.com.una.Trabalho.DTO.ClienteReply;
 import br.com.una.Trabalho.DTO.ClienteRequest;
 import br.com.una.Trabalho.Models.Cliente;
 import br.com.una.Trabalho.Repository.ClienteRepository;
+import br.com.una.Trabalho.Representations.Operations;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +17,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping(value = "/cliente")
+@CrossOrigin
 public class ClienteController {
 
     private ClienteRepository clienteRepository;
@@ -24,6 +30,20 @@ public class ClienteController {
     public ClienteController(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
+
+    @GetMapping(value = "/operations")
+    public @ResponseBody
+    HttpEntity<Object> operations() {
+
+        Operations operations = new Operations();
+        operations.add(linkTo(methodOn(ClienteController.class).listaClientes()).withRel("lista-clientes"));
+        operations.add(linkTo(methodOn(ClienteController.class).buscaPorCpf(null)).withRel("get-cliente"));
+        operations.add(linkTo(methodOn(ClienteController.class).save(null)).withRel("create-cliente"));
+        operations.add(linkTo(methodOn(ClienteController.class).atualizar(null, null)).withRel("update-cliente"));
+        operations.add(linkTo(methodOn(ClienteController.class).remover(null)).withRel("remove-cliente"));
+        return ResponseEntity.ok(operations);
+    }
+
 
     @Transactional
     @PostMapping

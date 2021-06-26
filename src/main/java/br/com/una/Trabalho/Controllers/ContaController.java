@@ -6,9 +6,11 @@ import br.com.una.Trabalho.DTO.ContaCorrenteRequest;
 import br.com.una.Trabalho.Models.ContaCorrente;
 import br.com.una.Trabalho.Repository.ClienteRepository;
 import br.com.una.Trabalho.Repository.ContaCorrenteRepository;
+import br.com.una.Trabalho.Representations.Operations;
 import br.com.una.Trabalho.Service.ContaService;
 import br.com.una.Trabalho.Util.ExceptionCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/conta")
 public class ContaController {
 
@@ -34,6 +40,19 @@ public class ContaController {
         this.contaService = contaService;
         this.contaCorrenteRepository = contaCorrenteRepository;
         this.clienteRepository = clienteRepository;
+    }
+
+
+    @GetMapping(value = "/transacoes")
+    public @ResponseBody
+    HttpEntity<Object> transacoes() {
+
+        Operations operations = new Operations();
+        operations.add(linkTo(methodOn(ContaController.class).listaContas()).withRel("lista-contas"));
+        operations.add(linkTo(methodOn(ContaController.class).save(null)).withRel("create-conta"));
+        operations.add(linkTo(methodOn(ContaController.class).depositar(null, null)).withRel("depositar"));
+        operations.add(linkTo(methodOn(ContaController.class).sacar(null, null)).withRel("sacar"));
+        return ResponseEntity.ok(operations);
     }
 
     @Transactional
@@ -68,7 +87,7 @@ public class ContaController {
 
 
     @PutMapping("/depositar/{quantidade}/{id}")
-    public ResponseEntity<?> depositar(@PathVariable double quantidade, @PathVariable Long id) {
+    public ResponseEntity<?> depositar(@PathVariable Double quantidade, @PathVariable Long id) {
 
         this.contaService.deposita(quantidade, id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -76,7 +95,7 @@ public class ContaController {
 
 
     @PutMapping("/sacar/{quantidade}/{id}\"")
-    public ResponseEntity<?> sacar(@PathVariable double quantidade, @PathVariable Long id) {
+    public ResponseEntity<?> sacar(@PathVariable Double quantidade, @PathVariable Long id) {
         if (quantidade <= 0) {
             throw new ExceptionCustom("valor incorreto");
         }
